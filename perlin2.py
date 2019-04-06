@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image
 import datetime;
+import subprocess
 
 sizeX = 512
 sizeY = 512
@@ -100,31 +101,110 @@ def perlin(x, y, z=0):
 picSizeX = 1000 #1000
 picSizeY = 1400 #1400
 
-desiredMax = 30.12 #30.12
+desiredMax = 300.#30.12
 interval = desiredMax / picSizeX
 print(interval)
     
 #make array 
-temp = np.empty([picSizeX,picSizeY,3])
-i = 0
-while(i < picSizeX):
-    ii = 0
-    while(ii < picSizeY):
-        tr = np.random.random()*0.1
-        pout = perlin(i*tr*interval,ii*tr*interval)
-        pout = (pout*10 + 255/2)
-        if(pout < 0):
-            pout = 0
-        if(pout > 255):
-            pout = 255
-        #print(int(pout))
-        temp[i,ii,0] = 0
-        temp[i,ii,1] = 0
-        temp[i,ii,2] = pout
-        ii += 1
-    i += 1
+
+temp = np.random.randint(low=0,high=255,size=[picSizeX,picSizeY,3],dtype=np.uint16)
+#temp = np.empty([picSizeX,picSizeY,3])
+
+if(True):
+    i = 0
+    while(i < picSizeX):
+        print(i)
+        ii = 0
+        while(ii < picSizeY):
+            tr = np.random.random()*0.1 #*(2*i/picSizeX)
+            pout = perlin((i-(picSizeX/2))*(interval*(1+tr)),(ii-(picSizeY/2))*(interval*(1+tr)))
+            pout = (pout*10 + 255/2)
+            if(pout < 150):
+                pout = 0
+            if(pout > 255):
+                pout = 255
+            #print(int(pout))
+            temp[i,ii,0] = 0
+            temp[i,ii,1] = 0
+            temp[i,ii,2] = pout
+            ii += 1
+        i += 1
 
 print(temp.shape)
+
+
+#clear out center
+center = np.asarray([picSizeX/2,picSizeY/2])
+
+if(True):
+    i = 0
+    while(i < picSizeX):
+        print(i)
+        ii = 0
+        while(ii < picSizeY):
+            if(np.linalg.norm(center-np.asarray([i,ii])) < 400+0.5+50+50):
+                temp[i,ii,0] = 0
+                temp[i,ii,1] = 0
+                temp[i,ii,2] = 0
+            ii += 1
+        i += 1
+
+#draw ring
+
+def xfun(x,y,t,z):
+    return x+(400-z*4)*np.cos(t*30)
+    
+def yfun(x,y,t,z):
+    return y+(400-z*4)*np.sin(t*30)
+
+#center the starting point
+x = picSizeX/2
+y = picSizeY/2
+ 
+#draw
+t = 0
+tMax = 800
+stepSize = 0.5
+while(t < tMax):
+    i = 0
+    while(i < 100):
+        xt = xfun(x+((np.random.random()-0.5)*5),y,t,i)
+        yt = yfun(x,y+((np.random.random()-0.5)*5),t,i)
+        if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
+            ixt = int(xt)
+            iyt = int(yt)
+            temp[ixt,iyt,0] = (t / tMax)*255
+            temp[ixt,iyt,1] = ((tMax-t) / tMax)*255
+            temp[ixt,iyt,2] = 55#(t / tMax)*255
+        i += 1
+    print("t:{0}\n".format(t))
+    t += np.random.random()*stepSize
+    
+    
+def xfun(x,y,t,z):
+    return x+(450.25)*np.cos(t*30)+50*np.cos(t*5)
+    
+def yfun(x,y,t,z):
+    return y+(450.25)*np.sin(t*30)+50*np.sin(t*5)
+
+#draw
+t = 0
+tMax = 800*4
+stepSize = 0.05
+while(t < tMax):
+    i = 0
+    while(i < 1):
+        xt = xfun(x,y,t,i)
+        yt = yfun(x,y,t,i)
+        if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
+            ixt = int(xt)
+            iyt = int(yt)
+            temp[ixt,iyt,0] = (t / tMax)*255
+            temp[ixt,iyt,1] = 255
+            temp[ixt,iyt,2] = 55#(t / tMax)*255
+        i += 1
+    print("t:{0}\n".format(t))
+    t += np.random.random()*stepSize
 
 
 # convert array to Image
@@ -136,6 +216,7 @@ ts = datetime.datetime.now().timestamp()
 name = "history/perlin_{0}.png".format(ts)    
 img.save(name, "PNG")
 
+subprocess.run(["cp", "./perlin2.py", "./history/perlin_{0}.py".format(ts)])
 
 #note: I'm on a mac and I usually run with: 
 #python art.py; open -a Preview test.png
