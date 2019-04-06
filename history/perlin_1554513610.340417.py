@@ -107,8 +107,8 @@ print(interval)
     
 #make array 
 
-temp = np.random.randint(low=0,high=255,size=[picSizeX,picSizeY,3],dtype=np.uint16)
-#temp = np.empty([picSizeX,picSizeY,3])
+#temp = np.random.randint(low=0,high=255,size=[picSizeX,picSizeY,3],dtype=np.uint16)
+temp = np.empty([picSizeX,picSizeY,3])
 
 if(False):
     i = 0
@@ -146,44 +146,6 @@ if(False):
                 temp[i,ii,0] = 0
                 temp[i,ii,1] = 0
                 temp[i,ii,2] = 0
-            ii += 1
-        i += 1
-  
-#noise to black by distance to center 
-if(True):
-    i = 0
-    while(i < picSizeX):
-        print(i)
-        ii = 0
-        while(ii < picSizeY):
-            dist = np.linalg.norm(center-np.asarray([i,ii]))
-            #normalize to 0,1
-            r = picSizeY - 0
-            a = (dist - 0) / r
-            if(np.random.random() > a):
-                temp[i,ii,0] = 0
-                temp[i,ii,1] = 0
-                temp[i,ii,2] = 0
-            ii += 1
-        i += 1  
-       
-#white to black by distance to center 
-if(False):
-    i = 0
-    while(i < picSizeX):
-        print(i)
-        ii = 0
-        while(ii < picSizeY):
-            dist = np.linalg.norm(center-np.asarray([i,ii]))
-            #normalize to 0,1
-            r = picSizeY - 0
-            a = (dist - 0) / r
-            #scale to [0,255]
-            r2 = 255 - 0
-            a = (a * r2) + 0
-            temp[i,ii,0] = a
-            temp[i,ii,1] = a
-            temp[i,ii,2] = a
             ii += 1
         i += 1
 
@@ -264,7 +226,7 @@ def yfun2(x,y,t,z):
 
 if(True):
     z = 0
-    while(z < 6):
+    while(z < 5):
         #draw
         ringCount = 0
         ringTimer = 0.
@@ -274,7 +236,7 @@ if(True):
         while(t < tMax):
             xt = xfun(x,y,t,z)
             yt = yfun(x,y,t,z)
-            if(False and xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
+            if(True and xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
                 ixt = int(xt)
                 iyt = int(yt)
                 temp[ixt,iyt,0] = 200
@@ -300,7 +262,6 @@ if(True):
             ringTimer += stepSize
             t += stepSize
         z += 1
-
 
 # convert array to Image
 img = Image.fromarray(temp.astype('uint8'))

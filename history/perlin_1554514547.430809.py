@@ -107,8 +107,8 @@ print(interval)
     
 #make array 
 
-temp = np.random.randint(low=0,high=255,size=[picSizeX,picSizeY,3],dtype=np.uint16)
-#temp = np.empty([picSizeX,picSizeY,3])
+#temp = np.random.randint(low=0,high=255,size=[picSizeX,picSizeY,3],dtype=np.uint16)
+temp = np.empty([picSizeX,picSizeY,3])
 
 if(False):
     i = 0
@@ -148,27 +148,9 @@ if(False):
                 temp[i,ii,2] = 0
             ii += 1
         i += 1
-  
-#noise to black by distance to center 
-if(True):
-    i = 0
-    while(i < picSizeX):
-        print(i)
-        ii = 0
-        while(ii < picSizeY):
-            dist = np.linalg.norm(center-np.asarray([i,ii]))
-            #normalize to 0,1
-            r = picSizeY - 0
-            a = (dist - 0) / r
-            if(np.random.random() > a):
-                temp[i,ii,0] = 0
-                temp[i,ii,1] = 0
-                temp[i,ii,2] = 0
-            ii += 1
-        i += 1  
        
-#white to black by distance to center 
-if(False):
+#noise to center 
+if(True):
     i = 0
     while(i < picSizeX):
         print(i)

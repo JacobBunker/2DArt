@@ -136,7 +136,7 @@ print(temp.shape)
 #clear out center
 center = np.asarray([picSizeX/2,picSizeY/2])
 
-if(False):
+if(True):
     i = 0
     while(i < picSizeX):
         print(i)
@@ -146,44 +146,6 @@ if(False):
                 temp[i,ii,0] = 0
                 temp[i,ii,1] = 0
                 temp[i,ii,2] = 0
-            ii += 1
-        i += 1
-  
-#noise to black by distance to center 
-if(True):
-    i = 0
-    while(i < picSizeX):
-        print(i)
-        ii = 0
-        while(ii < picSizeY):
-            dist = np.linalg.norm(center-np.asarray([i,ii]))
-            #normalize to 0,1
-            r = picSizeY - 0
-            a = (dist - 0) / r
-            if(np.random.random() > a):
-                temp[i,ii,0] = 0
-                temp[i,ii,1] = 0
-                temp[i,ii,2] = 0
-            ii += 1
-        i += 1  
-       
-#white to black by distance to center 
-if(False):
-    i = 0
-    while(i < picSizeX):
-        print(i)
-        ii = 0
-        while(ii < picSizeY):
-            dist = np.linalg.norm(center-np.asarray([i,ii]))
-            #normalize to 0,1
-            r = picSizeY - 0
-            a = (dist - 0) / r
-            #scale to [0,255]
-            r2 = 255 - 0
-            a = (a * r2) + 0
-            temp[i,ii,0] = a
-            temp[i,ii,1] = a
-            temp[i,ii,2] = a
             ii += 1
         i += 1
 
