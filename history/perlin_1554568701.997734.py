@@ -382,7 +382,7 @@ def drawCircle(x,y,radius,level):
             temp[ixt,iyt,1] = 0
             temp[ixt,iyt,2] = 255#(t / tMax)*255
         t += stepSize
-    if(level < 6):
+    if(level < 1):
         recursive(x-(radius/2),y-(radius/2),level+1)
 
 def recursive(x,y,level):

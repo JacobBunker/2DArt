@@ -98,7 +98,7 @@ def perlin(x, y, z=0):
     
     return (lerp(l1, l2, w))
     
-circleRes = 16
+circleRes = 4
 radius = (360*circleRes)*((1/4)) #need 3*2*radius across, high to fit
 picSizeX = int(3*2*radius) #1000
 picSizeY = int(3*2*radius) #1400
@@ -382,7 +382,7 @@ def drawCircle(x,y,radius,level):
             temp[ixt,iyt,1] = 0
             temp[ixt,iyt,2] = 255#(t / tMax)*255
         t += stepSize
-    if(level < 6):
+    if(level < 1):
         recursive(x-(radius/2),y-(radius/2),level+1)
 
 def recursive(x,y,level):

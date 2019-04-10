@@ -98,10 +98,8 @@ def perlin(x, y, z=0):
     
     return (lerp(l1, l2, w))
     
-circleRes = 16
-radius = (360*circleRes)*((1/4)) #need 3*2*radius across, high to fit
-picSizeX = int(3*2*radius) #1000
-picSizeY = int(3*2*radius) #1400
+picSizeX = 1400 #1000
+picSizeY = 1400 #1400
 
 desiredMax = 300.#30.12
 interval = desiredMax / picSizeX
@@ -382,7 +380,7 @@ def drawCircle(x,y,radius,level):
             temp[ixt,iyt,1] = 0
             temp[ixt,iyt,2] = 255#(t / tMax)*255
         t += stepSize
-    if(level < 6):
+    if(level < 2):
         recursive(x-(radius/2),y-(radius/2),level+1)
 
 def recursive(x,y,level):
@@ -393,7 +391,7 @@ def recursive(x,y,level):
         i += 1
     print ("{0}circles level {1}".format(o,level))
     z = 0 #unused currently
-    nextRadius = (360*circleRes)*((1/4)**level) 
+    nextRadius = (360*4)*((1/4)**level) 
     adj = 2*nextRadius
     drawCircle(x,y,nextRadius,level,)
     drawCircle(x+(adj),y,nextRadius,level)
@@ -411,8 +409,7 @@ def recursive(x,y,level):
         
 if(True):
     level = 1
-    radius = (360*circleRes)*((1/4)**level)
-    recursive(x-(radius*2),y-(radius*2),level) 
+    recursive(x-360,y-360,level) 
 
 
 # convert array to Image

@@ -98,10 +98,8 @@ def perlin(x, y, z=0):
     
     return (lerp(l1, l2, w))
     
-circleRes = 16
-radius = (360*circleRes)*((1/4)) #need 3*2*radius across, high to fit
-picSizeX = int(3*2*radius) #1000
-picSizeY = int(3*2*radius) #1400
+picSizeX = 1000 #1000
+picSizeY = 1400 #1400
 
 desiredMax = 300.#30.12
 interval = desiredMax / picSizeX
@@ -360,59 +358,34 @@ if(False):
             ii += 1
         i += 1
 
-def xfun(x,y,t,radius):
-    return x+(radius*np.cos(np.radians(t/4)))
+def xfun(x,y,t,z):
+    return x+(360/(z*4))*np.cos(np.radians(t/4))
     
-def yfun(x,y,t,radius):
-    return y+(radius*np.sin(np.radians(t/4)))       
-    
-    
-def drawCircle(x,y,radius,level):
-    #print("\tcircle")
-    t = 0
-    tMax = 360*4
-    stepSize = 1.
-    while(t < tMax):
-        xt = xfun(x,y,t,radius)
-        yt = yfun(x,y,t,radius)
-        if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
-            ixt = int(xt)
-            iyt = int(yt)
-            temp[ixt,iyt,0] = 0
-            temp[ixt,iyt,1] = 0
-            temp[ixt,iyt,2] = 255#(t / tMax)*255
-        t += stepSize
-    if(level < 6):
-        recursive(x-(radius/2),y-(radius/2),level+1)
+def yfun(x,y,t,z):
+    return y+(360/(z*4))*np.sin(np.radians(t/4))        
 
 def recursive(x,y,level):
-    o = ""
-    i = 1
-    while(i < level):
-        o = o + "\t"
-        i += 1
-    print ("{0}circles level {1}".format(o,level))
-    z = 0 #unused currently
-    nextRadius = (360*circleRes)*((1/4)**level) 
-    adj = 2*nextRadius
-    drawCircle(x,y,nextRadius,level,)
-    drawCircle(x+(adj),y,nextRadius,level)
-    drawCircle(x+(adj*2),y,nextRadius,level)
-    
-    drawCircle(x,y+adj,nextRadius,level)
-    drawCircle(x+(adj),y+adj,nextRadius,level)
-    drawCircle(x+(adj*2),y+adj,nextRadius,level)
-    
-    drawCircle(x,y+(adj*2),nextRadius,level)
-    drawCircle(x+adj,y+(adj*2),nextRadius,level)
-    drawCircle(x+(adj*2),y+(adj*2),nextRadius,level)
-    
-    
+    z = 1
+    while(z <= 4):
+        print ("circle level {0}".format(level))
+        t = 0
+        tMax = 360*4
+        stepSize = 1.
+        while(t < tMax):
+            xt = xfun(x+(360/(z*4)),y,t,level)
+            yt = yfun(x,y+(360/(z*4)),t,level)
+            if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
+                ixt = int(xt)
+                iyt = int(yt)
+                temp[ixt,iyt,0] = 0
+                temp[ixt,iyt,1] = 0
+                temp[ixt,iyt,2] = 255#(t / tMax)*255
+            t += stepSize
+        z += 1
         
 if(True):
     level = 1
-    radius = (360*circleRes)*((1/4)**level)
-    recursive(x-(radius*2),y-(radius*2),level) 
+    recursive(x-360,y-360,level) 
 
 
 # convert array to Image

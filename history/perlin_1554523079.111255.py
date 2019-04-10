@@ -98,10 +98,8 @@ def perlin(x, y, z=0):
     
     return (lerp(l1, l2, w))
     
-circleRes = 16
-radius = (360*circleRes)*((1/4)) #need 3*2*radius across, high to fit
-picSizeX = int(3*2*radius) #1000
-picSizeY = int(3*2*radius) #1400
+picSizeX = 1000 #1000
+picSizeY = 1400 #1400
 
 desiredMax = 300.#30.12
 interval = desiredMax / picSizeX
@@ -320,99 +318,25 @@ if(False):
         z += 1
         
 def xfun(x,y,t,z):
-    return x+(450.25-((450.25/100)*z))*np.cos(np.radians(t/4))
+    return x+(400*z)*np.cos(np.radians(t))
     
 def yfun(x,y,t,z):
-    return y+(0-(4*z))*np.sin(np.radians(t/4))        
+    return y+(30*z)*np.sin(np.radians(t))        
 
-if(False):
-    z = 0
-    while(z < 100):
-        print ("eye {0}".format(z))
-        t = 0
-        tMax = 360*4
-        stepSize = 1.
-        while(t < tMax):
-            xt = xfun(x+(np.random.random()-1)*20,y,t,z)
-            yt = yfun(x,y+(np.random.random()-1)*20,t,z)
-            if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
-                ixt = int(xt)
-                iyt = int(yt)
-                temp[ixt,iyt,0] = 0
-                temp[ixt,iyt,1] = 0
-                temp[ixt,iyt,2] = 255#(t / tMax)*255
-            t += stepSize
-        z += 1
-        
-#black pupil
-center = np.asarray([picSizeX/2,picSizeY/2])
-
-if(False):
-    i = int(picSizeX/2 - 100)
-    while(i < int(picSizeX/2 + 100)):
-        print(i)
-        ii = int(picSizeY/2 - 100)
-        while(ii < int(picSizeY/2 + 100)):
-            if(np.linalg.norm(center-np.asarray([i,ii])) < 10):
-                temp[i,ii,0] = 0
-                temp[i,ii,1] = 0
-                temp[i,ii,2] = 0
-            ii += 1
-        i += 1
-
-def xfun(x,y,t,radius):
-    return x+(radius*np.cos(np.radians(t/4)))
-    
-def yfun(x,y,t,radius):
-    return y+(radius*np.sin(np.radians(t/4)))       
-    
-    
-def drawCircle(x,y,radius,level):
-    #print("\tcircle")
+if(True):
     t = 0
-    tMax = 360*4
+    tMax = 360*1000
     stepSize = 1.
     while(t < tMax):
-        xt = xfun(x,y,t,radius)
-        yt = yfun(x,y,t,radius)
+        xt = xfun(x,y,t,1)
+        yt = yfun(x,y,t,1)
         if(xt < picSizeX and xt >= 0 and yt < picSizeY and yt >= 0):
             ixt = int(xt)
             iyt = int(yt)
             temp[ixt,iyt,0] = 0
-            temp[ixt,iyt,1] = 0
-            temp[ixt,iyt,2] = 255#(t / tMax)*255
+            temp[ixt,iyt,1] = 255
+            temp[ixt,iyt,2] = 0#(t / tMax)*255
         t += stepSize
-    if(level < 6):
-        recursive(x-(radius/2),y-(radius/2),level+1)
-
-def recursive(x,y,level):
-    o = ""
-    i = 1
-    while(i < level):
-        o = o + "\t"
-        i += 1
-    print ("{0}circles level {1}".format(o,level))
-    z = 0 #unused currently
-    nextRadius = (360*circleRes)*((1/4)**level) 
-    adj = 2*nextRadius
-    drawCircle(x,y,nextRadius,level,)
-    drawCircle(x+(adj),y,nextRadius,level)
-    drawCircle(x+(adj*2),y,nextRadius,level)
-    
-    drawCircle(x,y+adj,nextRadius,level)
-    drawCircle(x+(adj),y+adj,nextRadius,level)
-    drawCircle(x+(adj*2),y+adj,nextRadius,level)
-    
-    drawCircle(x,y+(adj*2),nextRadius,level)
-    drawCircle(x+adj,y+(adj*2),nextRadius,level)
-    drawCircle(x+(adj*2),y+(adj*2),nextRadius,level)
-    
-    
-        
-if(True):
-    level = 1
-    radius = (360*circleRes)*((1/4)**level)
-    recursive(x-(radius*2),y-(radius*2),level) 
 
 
 # convert array to Image
